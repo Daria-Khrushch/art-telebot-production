@@ -5,12 +5,14 @@ const prisma = new PrismaClient();
 export const GET = async (req, res) => {
   try {
     const { query } = parse(req.url, true);
-    const { title, theme, language } = query;
+    const { title, theme, language, geo, type } = query;
 
     // console.log("title", title);
     // console.log("theme", theme);
     // console.log("language", language);
     // console.log(query);
+    // console.log(geo)
+    // console.log(type)
     if (title && !theme && !language) {
       const channels = await prisma.channel.findMany({
         where: {name: title || ""},

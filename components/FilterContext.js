@@ -10,6 +10,8 @@ export function FilterContextProvider({ children }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchTheme, setSearchTheme] = useState("");
   const [searchLang, setSearchLang] = useState("");
+  const [searchGeo, setSearchGeo] = useState("");
+  const [searchType, setSearchType] = useState("");
   const [searchTitle, setSearchTitle] = useState("");
   const [showLoader, setShowLoader] = useState(true);
   const [showNoChannel, setShowNoChannel] = useState(false);
@@ -34,7 +36,7 @@ export function FilterContextProvider({ children }) {
     const getData = async () => {
       try {
         const res = await fetch(
-          `/api/search/?theme=${searchTheme}&language=${searchLang}&title=${searchQuery}`
+          `/api/search/?theme=${searchTheme}&language=${searchLang}&title=${searchQuery}&type=${searchType}&geo=${searchGeo}`
         );
         const data = await res.json();
         const filteredChannels = data.filter(
@@ -55,20 +57,27 @@ export function FilterContextProvider({ children }) {
         const uniqueGeos = Array.from(
           new Set(data.map((channel) => channel.geolocation))
         );
-        console.log(uniqueGeos)
-        console.log(uniqueTypes)
         setThemes(uniqueThemes);
         setLang(uniqueLang);
         setGeos(uniqueGeos);
         setTypes(uniqueTypes);
         setChannels(filteredChannels);
         setRemovedChannels(otherChannels);
+
+        const timer = setTimeout(() => {
+          setShowLoader(false);
+          setShowNoChannel(true);
+        }, 5000);
+
+        return () => {
+          clearTimeout(timer);
+        };
       } catch (error) {
         console.log(error);
       }
     };
     getData();
-  }, [searchTitle, searchTheme, searchLang]);
+  }, [searchTitle, searchTheme, searchLang, searchGeo, searchType]);
 
   const onSearch = async (event) => {
     event.preventDefault();
@@ -91,6 +100,16 @@ export function FilterContextProvider({ children }) {
   const onLangFilter = (event) => {
     event.preventDefault();
     setSearchLang(event.target.value);
+  };
+
+  const onGeoFilter = (event) => {
+    event.preventDefault();
+    setSearchGeo(event.target.value);
+  };
+
+  const onTypeFilter = (event) => {
+    event.preventDefault();
+    setSearchType(event.target.value);
   };
 
   const handleSortByView = () => {
@@ -181,6 +200,8 @@ export function FilterContextProvider({ children }) {
     lang,
     types,
     geos,
+    onTypeFilter,
+    onGeoFilter,
   };
 
   return (

@@ -4,7 +4,7 @@ import { useFilterContext } from "./FilterContext";
 
 export default function Filters() {
 
-  const { themes,lang, setSearchQuery, onSearch, searchQuery, onThemeFilter,onLangFilter } = useFilterContext()
+  const { themes,lang, setSearchQuery, onSearch, searchQuery, onThemeFilter,onLangFilter, geos, types, onTypeFilter, onGeoFilter } = useFilterContext()
 
 
 
@@ -41,7 +41,7 @@ export default function Filters() {
         <p className="hidden lg:block">Тематика:</p>
         <select className="focus:outline-none my-2 relative p-1 w-full border-solid border-2 border-slate-300 rounded-md" onChange={(event) =>  onThemeFilter(event)}>
           <option className="" value="">
-            Все тематики
+            Все
           </option>
           {themes && themes.length > 0
             ? themes.map((item) => (
@@ -56,10 +56,42 @@ export default function Filters() {
         <p className=" hidden lg:block">Язык:</p>
         <select className="focus:outline-none my-2 relative p-1 w-full border-solid border-2 border-slate-300 rounded-md" onChange={(event) => onLangFilter(event)}>
           <option className="filters-option" value="">
-            Все языки
+            Все
           </option>
           {lang && lang.length > 0
             ? lang.map((items) => (
+                <option key={items} className="filters-option" value={items}>
+                  {items}
+                </option>
+              ))
+            : null}
+        </select>
+      </div>
+
+      <div className="">
+        <p className=" hidden lg:block">Геолокация:</p>
+        <select className="focus:outline-none my-2 relative p-1 w-full border-solid border-2 border-slate-300 rounded-md" onChange={(event) => onGeoFilter(event)}>
+          <option className="filters-option" value="">
+            Все
+          </option>
+          {geos && geos.length > 0
+            ? geos.map((items) => (
+                <option key={items} className="filters-option" value={items}>
+                  {items}
+                </option>
+              ))
+            : null}
+        </select>
+      </div>
+
+      <div className="">
+        <p className=" hidden lg:block">Тип:</p>
+        <select className="focus:outline-none my-2 relative p-1 w-full border-solid border-2 border-slate-300 rounded-md" onChange={(event) => onTypeFilter(event)}>
+          <option className="filters-option" value="">
+            Все
+          </option>
+          {types && types.length > 0
+            ? types.map((items) => (
                 <option key={items} className="filters-option" value={items}>
                   {items}
                 </option>

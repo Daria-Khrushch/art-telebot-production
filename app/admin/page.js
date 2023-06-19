@@ -2,7 +2,6 @@
 import NewCard from "@components/NewCard";
 import Filters from "@components/Filters";
 import React from "react";
-import { useState } from "react";
 import PulseLoader from "react-spinners/PulseLoader";
 import AdminCards from "@components/AdminCards";
 import RemovedCard from "@components/RemovedCard";
@@ -64,8 +63,8 @@ const Home = () => {
                   </div>
                 )}
                 {showNoChannel && (
-                  <div className="card text-red-600 lg:text-xl">
-                    Канал с таким названием не найден
+                  <div className="card lg:text-xl">
+                    Список пуст
                   </div>
                 )}
               </>

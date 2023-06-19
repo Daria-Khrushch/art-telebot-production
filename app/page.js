@@ -59,7 +59,7 @@ const Home = () => {
                   </div>
                 )}
                 {showNoChannel && (
-                  <div className="card  text-red-600 lg:text-xl">Канал с таким названием не найден</div>
+                  <div className="card lg:text-xl">Список пуст</div>
                 )}
               </>
             )}

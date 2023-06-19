@@ -153,7 +153,7 @@ const AdminCards = ({ channel }) => {
 
           <div className="meta border-slate-300 border-r lg:justify-between">
             <div className="lg:flex flex-col">
-              <h3 className="lg:mr-2 lg:font-semibold">Подписчики</h3>
+               {channel.type === "группа" ? <h3 className="lg:mr-2 lg:font-semibold">Подписчики</h3> : <h3 className="lg:mr-2 lg:font-semibold">Участники</h3>}
               <span>{channel.subscribers}</span>
             </div>
 

@@ -18,6 +18,7 @@ const NewCard = () => {
   const [geo, setGeo] = useState("");
   const [type, setType] = useState("");
   const [errors, setErrors] = useState({});
+  const [shown, setShown] = useState(1);
 
   const { themes, lang, geos, types } = useFilterContext();
 
@@ -81,6 +82,9 @@ const NewCard = () => {
           description: description,
           subscribers: subscribers,
           views: views,
+          is_shown: shown,
+          type: type,
+          geolocation: geo,
           cpv: cpv,
         }),
       })
@@ -128,7 +132,7 @@ const NewCard = () => {
         <form
           id="buyer-modal-form"
           onSubmit={handleSubmit}
-          className="modal-form"
+          className="modal-form text-xs"
         >
           <label className="modal-label">
             Название:
@@ -294,6 +298,16 @@ const NewCard = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
+          </label>
+
+           <label className="modal-label">
+            <select
+              className="modal-input"
+              onChange={(event) => handleShow(event)}
+            >
+              <option value="1">Показать</option>
+              <option value="0">Скрыть</option>
+            </select>
           </label>
 
           <button type="submit">Отправить</button>
