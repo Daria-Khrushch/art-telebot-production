@@ -14,6 +14,8 @@ export const transporter = nodemailer.createTransport({
     user: email,
     pass,
   },
+  port: 587,
+  secure: false,
 });
 
 export const mailOptions = {
