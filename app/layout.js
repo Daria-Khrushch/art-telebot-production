@@ -4,8 +4,8 @@ import { Providers } from "@components/Providers";
 import { FilterContextProvider } from "@components/FilterContext";
 
 export const metadata = {
-  title: "telebot-services",
-  description: "telebot-services",
+  title: "telegram.ads",
+  description: "telegram.ads",
 };
 
 const RootLayout = ({ children }) => {

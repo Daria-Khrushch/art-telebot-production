@@ -51,6 +51,10 @@
     margin: 0 auto;
 }
 
+.title-form{
+    margin-bottom: 20px;
+}
+
 .modal-label {
     display: block;
     margin-bottom: 5px;

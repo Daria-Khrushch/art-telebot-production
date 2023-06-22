@@ -62,7 +62,7 @@ const Card = ({ channel }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify({
           buyer_name: buyer,
@@ -73,7 +73,7 @@ const Card = ({ channel }) => {
           channel_name: channel.name,
           channel_id: channel.id,
         }),
-      })
+      });
     }
 
     setBuyer("");
@@ -107,12 +107,12 @@ const Card = ({ channel }) => {
         <div className=" grid grid-cols-[20%_30%_30%_10%] gap-2 md:gap-3 lg:gap:5 lg:grid-cols-[10%_20%_30%_25%_5%]">
           <div>
             <div className="border-slate-300 border-r lg:justify-center lg:flex">
-              <Image
+              <img
                 className="rounded-lg"
                 src={channel.avatar}
                 alt=""
-                width={80}
-                height={80}
+                width="80"
+                height="80"
               />
             </div>
           </div>
@@ -124,8 +124,12 @@ const Card = ({ channel }) => {
 
           <div className="meta border-slate-300 border-r lg:justify-between">
             <div className="lg:flex flex-col">
-              {channel.type === "группа" ? <h3 className="lg:mr-2 lg:font-semibold">Подписчики</h3> : <h3 className="lg:mr-2 lg:font-semibold">Участники</h3>}
-              
+              {channel.type === "группа" ? (
+                <h3 className="lg:mr-2 lg:font-semibold">Подписчики</h3>
+              ) : (
+                <h3 className="lg:mr-2 lg:font-semibold">Участники</h3>
+              )}
+
               <span>{channel.subscribers}</span>
             </div>
 
@@ -189,14 +193,14 @@ const Card = ({ channel }) => {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <h3 className="m-4">
+        <h3 className="modal-form title-form">
           Спасибо за ваш интерес к рекламе в нашем телеграм-канале! Пожалуйста,
           оставьте свои данные ниже, и мы свяжемся с вами в ближайшее время:
         </h3>
         <form
-          id="buyer-modal-form"
+          id="buyer-modal-form "
           onSubmit={handleSubmit}
-          className="modal-form"
+          className="modal-form pb-4"
         >
           <label className="modal-label">
             Ваше имя:
@@ -212,7 +216,7 @@ const Card = ({ channel }) => {
           <label className="modal-label">
             Ваш логин в Telegram:
             <input
-              className="modal-input"
+              className="modal-input mb-5"
               type="tel"
               value={telegram}
               onChange={(e) => setTelegram(e.target.value)}
@@ -222,7 +226,9 @@ const Card = ({ channel }) => {
             )}
           </label>
 
-          <button type="submit">Отправить</button>
+          <button type="submit">
+            Отправить
+          </button>
         </form>
       </Modal>
     </>
