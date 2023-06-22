@@ -35,7 +35,7 @@ export const POST = async (req) => {
     await transporter.sendMail({
       ...mailOptions,
       ...generateEmailContent(data),
-      subject: "Telebot.tg",
+      subject: "Telegram.ads",
     });
     return new Response("Success", { status: 200 });
   } catch (err) {
