@@ -6,10 +6,10 @@ import Modal from "./Modal";
 const Card = ({ channel }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [price, setPrice] = useState(0);
-  const [value, setValue] = useState(1);
-  const [buyer, setBuyer] = useState("user");
-  const [telegram, setTelegram] = useState("@user");
-  const [format, setFormat] = useState("1/24");
+  const [value, setValue] = useState(0);
+  const [buyer, setBuyer] = useState("");
+  const [telegram, setTelegram] = useState("");
+  const [format, setFormat] = useState("");
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -58,22 +58,22 @@ const Card = ({ channel }) => {
           console.error(error);
         });
 
-      const sendEmail = await fetch("/api/email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          buyer_name: buyer,
-          buyer_telegram: telegram,
-          ads_format: format,
-          ads_quantity: value,
-          ads_sum: price,
-          channel_name: channel.name,
-          channel_id: channel.id,
-        }),
-      });
+      // const sendEmail = await fetch("/api/email", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Accept: "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     buyer_name: buyer,
+      //     buyer_telegram: telegram,
+      //     ads_format: format,
+      //     ads_quantity: value,
+      //     ads_sum: price,
+      //     channel_name: channel.name,
+      //     channel_id: channel.id,
+      //   }),
+      // });
     }
 
     setBuyer("");
@@ -118,23 +118,23 @@ const Card = ({ channel }) => {
           </div>
 
           <div className="hidden lg:block">
-            <h3 className="font-semibold">{channel.name}</h3>
+            <h3 className="font-semibold mb-2">{channel.name}</h3>
             <span className="desc">{channel.description}</span>
           </div>
 
           <div className="meta border-slate-300 border-r lg:justify-between">
             <div className="lg:flex flex-col">
               {channel.type === "группа" ? (
-                <h3 className="lg:mr-2 lg:font-semibold">Подписчики</h3>
+                <h3 className="lg:mr-2 lg:font-semibold lg:mb-3">Подписчики</h3>
               ) : (
-                <h3 className="lg:mr-2 lg:font-semibold">Участники</h3>
+                <h3 className="lg:mr-2 lg:font-semibold lg:mb-3">Участники</h3>
               )}
 
-              <span>{channel.subscribers}</span>
+              <span className="lg:mb-2">{channel.subscribers}</span>
             </div>
 
             <div className="lg:flex flex-col">
-              <h3 className="lg:mr-2 lg:font-semibold">Просмотры</h3>
+              <h3 className="lg:mr-2 lg:font-semibold lg:mb-3">Просмотры</h3>
               <span>{channel.views}</span>
             </div>
           </div>
@@ -187,7 +187,7 @@ const Card = ({ channel }) => {
           </div>
         </div>
         <div className="grid grid-cols-[20%_auto] gap-2 md:gap-6 lg:hidden">
-          <h3 className="font-semibold">{channel.name}</h3>
+          <h3 className="font-semibold mb-2">{channel.name}</h3>
           <span className="desc">{channel.description}</span>
         </div>
       </div>

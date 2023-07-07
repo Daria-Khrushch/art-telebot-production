@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
-// import useQueryParams from "@utils/useQueryParams";
+import { types_data } from "@configs/data";
 
 const FilterContext = createContext();
 
@@ -15,7 +15,6 @@ export function FilterContextProvider({ children }) {
   const [searchTitle, setSearchTitle] = useState("");
   const [showLoader, setShowLoader] = useState(true);
   const [showNoChannel, setShowNoChannel] = useState(false);
-  // const { queryParams, setQueryParams } = useQueryParams();
   const [isViewSorted, setIsViewSorted] = useState(false);
   const [isViewSortedDesc, setIsViewSortedDesc] = useState(false);
   const [isSubSorted, setIsSubSorted] = useState(false);
@@ -23,9 +22,10 @@ export function FilterContextProvider({ children }) {
   const [isCpvSorted, setIsCpvSorted] = useState(false);
   const [isCpvSortedDesc, setIsCpvSortedDesc] = useState(false);
   const [removedChannels, setRemovedChannels] = useState([]);
+  const [newChannels, setNewChannels] = useState([]);
   const [themes, setThemes] = useState([]);
   const [lang, setLang] = useState([]);
-  const [types, setTypes] = useState([]);
+  const [types, setTypes] = useState(types_data);
   const [geos, setGeos] = useState([]);
 
   const toggleMenu = () => {
@@ -42,7 +42,15 @@ export function FilterContextProvider({ children }) {
         const filteredChannels = data.filter(
           (channel) => channel.is_shown === 1
         );
-        const otherChannels = data.filter((channel) => channel.is_shown === 0);
+        // const channelsOffers = data.map(
+        //   (channel) => console.log(channel.special_offer)
+        // );
+        const otherChannels = data.filter(
+          (channel) => channel.is_shown === 0 && channel.is_new === 0
+        );
+        const newFormChannels = data.filter(
+          (channel) => channel.is_shown === 0 && channel.is_new === 1
+        );
         const uniqueThemes = Array.from(
           new Set(data.map((channel) => channel.theme))
         );
@@ -50,9 +58,9 @@ export function FilterContextProvider({ children }) {
           new Set(data.map((channel) => channel.language))
         );
 
-        const uniqueTypes = Array.from(
-          new Set(data.map((channel) => channel.type))
-        );
+        // const uniqueTypes = Array.from(
+        //   new Set(data.map((channel) => channel.type))
+        // );
 
         const uniqueGeos = Array.from(
           new Set(data.map((channel) => channel.geolocation))
@@ -60,10 +68,10 @@ export function FilterContextProvider({ children }) {
         setThemes(uniqueThemes);
         setLang(uniqueLang);
         setGeos(uniqueGeos);
-        setTypes(uniqueTypes);
+        // setTypes(uniqueTypes);
         setChannels(filteredChannels);
         setRemovedChannels(otherChannels);
-
+        setNewChannels(newFormChannels);
         const timer = setTimeout(() => {
           setShowLoader(false);
           setShowNoChannel(true);
@@ -174,6 +182,132 @@ export function FilterContextProvider({ children }) {
     setChannels(filteredChannels);
   };
 
+  const handleSpecialOffersChange = (isChecked) => {
+    if (isChecked) {
+      const сhannelsWithSpecialOffers = channels.filter(
+        (channel) => channel.special_offer !== ""
+      );
+      setChannels(сhannelsWithSpecialOffers);
+    } else {
+      const getData = async () => {
+        try {
+          const res = await fetch(
+            `/api/search/?theme=${searchTheme}&language=${searchLang}&title=${searchQuery}&type=${searchType}&geo=${searchGeo}`
+          );
+          const data = await res.json();
+          const filteredChannels = data.filter(
+            (channel) => channel.is_shown === 1
+          );
+          // const channelsOffers = data.map(
+          //   (channel) => console.log(channel.special_offer)
+          // );
+          const otherChannels = data.filter(
+            (channel) => channel.is_shown === 0 && channel.is_new === 0
+          );
+          const newFormChannels = data.filter(
+            (channel) => channel.is_shown === 0 && channel.is_new === 1
+          );
+          const uniqueThemes = Array.from(
+            new Set(data.map((channel) => channel.theme))
+          );
+          const uniqueLang = Array.from(
+            new Set(data.map((channel) => channel.language))
+          );
+
+          // const uniqueTypes = Array.from(
+          //   new Set(data.map((channel) => channel.type))
+          // );
+
+          const uniqueGeos = Array.from(
+            new Set(data.map((channel) => channel.geolocation))
+          );
+          setThemes(uniqueThemes);
+          setLang(uniqueLang);
+          setGeos(uniqueGeos);
+          // setTypes(uniqueTypes);
+          setChannels(filteredChannels);
+          setRemovedChannels(otherChannels);
+          setNewChannels(newFormChannels);
+          const timer = setTimeout(() => {
+            setShowLoader(false);
+            setShowNoChannel(true);
+          }, 5000);
+
+          return () => {
+            clearTimeout(timer);
+          };
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getData();
+    }
+  };
+
+  const handlePackageOffersChange = (isChecked) => {
+    if (isChecked) {
+      const сhannelsWithSpecialOffers = channels.filter(
+        (channel) => channel.package_offer !== ""
+      );
+      setChannels(сhannelsWithSpecialOffers);
+    } else {
+      const getData = async () => {
+        try {
+          const res = await fetch(
+            `/api/search/?theme=${searchTheme}&language=${searchLang}&title=${searchQuery}&type=${searchType}&geo=${searchGeo}`
+          );
+          const data = await res.json();
+          const filteredChannels = data.filter(
+            (channel) => channel.is_shown === 1
+          );
+          // const channelsOffers = data.map(
+          //   (channel) => console.log(channel.special_offer)
+          // );
+          const otherChannels = data.filter(
+            (channel) => channel.is_shown === 0 && channel.is_new === 0
+          );
+          const newFormChannels = data.filter(
+            (channel) => channel.is_shown === 0 && channel.is_new === 1
+          );
+          const uniqueThemes = Array.from(
+            new Set(data.map((channel) => channel.theme))
+          );
+          const uniqueLang = Array.from(
+            new Set(data.map((channel) => channel.language))
+          );
+
+          // const uniqueTypes = Array.from(
+          //   new Set(data.map((channel) => channel.type))
+          // );
+
+          const uniqueGeos = Array.from(
+            new Set(data.map((channel) => channel.geolocation))
+          );
+          setThemes(uniqueThemes);
+          setLang(uniqueLang);
+          setGeos(uniqueGeos);
+          // setTypes(uniqueTypes);
+          setChannels(filteredChannels);
+          setRemovedChannels(otherChannels);
+          setNewChannels(newFormChannels);
+          const timer = setTimeout(() => {
+            setShowLoader(false);
+            setShowNoChannel(true);
+          }, 5000);
+
+          return () => {
+            clearTimeout(timer);
+          };
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getData();
+    }
+  };
+
+
+
   const contextValue = {
     channels,
     setChannels,
@@ -202,6 +336,10 @@ export function FilterContextProvider({ children }) {
     geos,
     onTypeFilter,
     onGeoFilter,
+    setShowLoader,
+    newChannels,
+    handleSpecialOffersChange,
+    handlePackageOffersChange,
   };
 
   return (

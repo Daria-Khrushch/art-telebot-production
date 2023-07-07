@@ -11,8 +11,9 @@ const Navbar = () => {
 
   return (
     <header>
-      <nav className="hidden lg:flex items-center justify-between flex-wrap p-4 shadow-lg shadow-slate-20 lg:px-20">
-        <div>
+      <nav className="hidden lg:flex  shadow-lg">
+        <div className="container sm:container-md md:container-lg mx-auto lg:flex  items-center justify-between flex-wrap p-4  shadow-slate-20 lg:px-20">
+           <div>
           <h1 className="text-2xl font-bold lg:text-3xl"><Link href="/">Telegram.ads</Link></h1>
         </div>
 
@@ -29,6 +30,8 @@ const Navbar = () => {
             </div>
           </>
         )}
+        </div>
+       
       </nav>
 
       <nav className="flex items-center justify-between flex-wrap p-2 lg:hidden shadow-lg shadow-slate-20">

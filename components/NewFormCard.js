@@ -2,10 +2,10 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
+import Link from "next/link";
 import { useFilterContext } from "./FilterContext";
-import Checkbox from "./Checkbox";
 
-const AdminCards = ({ channel }) => {
+const NewFormCard = ({ channel }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [format, setFormat] = useState("");
   const [price, setPrice] = useState(0);
@@ -18,7 +18,7 @@ const AdminCards = ({ channel }) => {
   const [description, setDescription] = useState(channel.description);
   const [subscribers, setSubscribers] = useState(channel.subscribers);
   const [views, setViews] = useState(channel.views);
-  const [shown, setShown] = useState(channel.is_shown);
+  const [shown, setShown] = useState(1);
   const [cpv, setCpv] = useState(channel.cpv);
   const [geo, setGeo] = useState(channel.geolocation);
   const [type, setType] = useState(channel.type);
@@ -34,22 +34,6 @@ const AdminCards = ({ channel }) => {
   useEffect(() => {
     setPrice(channel.cpv);
   }, [channel]);
-
-  const handleSpecialOffersChangeForm = (isChecked) => {
-    if (isChecked) {
-      setSpecialOffer("1");
-    } else {
-      setSpecialOffer("");
-    }
-  };
-
-  const handlePackageOffersChangeForm = (isChecked) => {
-    if (isChecked) {
-      setPackageOffer("1");
-    } else {
-      setPackageOffer("");
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,12 +94,11 @@ const AdminCards = ({ channel }) => {
           description: description,
           subscribers: subscribers,
           views: views,
+          link: link,
           cpv: cpv,
           is_shown: shown,
           type: type,
           geolocation: geo,
-          link: link,
-          cpv: cpv,
           is_new: 0,
           special_offer: specialOffer,
           package_offer: packageOffer,
@@ -135,7 +118,6 @@ const AdminCards = ({ channel }) => {
     setErrors({});
     setIsModalOpen(false);
   };
-
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -154,6 +136,7 @@ const AdminCards = ({ channel }) => {
     const value = event.target.value;
     setFormat(value);
   };
+
   const handleShow = (event) => {
     event.preventDefault();
     const valueToNum = parseInt(event.target.value);
@@ -161,13 +144,13 @@ const AdminCards = ({ channel }) => {
   };
   return (
     <>
-      <div className="card grid text-xs p-2 mb-2 grid-rows-[1fr_auto] gap-2 lg:text-xl lg:mb-5 lg:p-5 lg:grid-rows-1">
+      <div className="card grid text-xs p-2 mb-2 grid-rows-[1fr_auto] gap-2 bg-green-200 lg:text-xl lg:mb-5 lg:p-5 lg:grid-rows-1">
         <div className=" grid grid-cols-[20%_30%_30%_10%] gap-2 md:gap-3 lg:gap:5 lg:grid-cols-[10%_20%_30%_25%_5%]">
           <div>
             <div className="border-slate-300 border-r lg:justify-center lg:flex">
               <Image
-                className="rounded-lg"
-                src={channel.avatar}
+                className="rounded-lg removed-logo"
+                src="/assets/images/question-mark.png"
                 alt=""
                 width={80}
                 height={80}
@@ -240,20 +223,7 @@ const AdminCards = ({ channel }) => {
               />
             </div>
 
-            <div>
-              {priceAfterDiscount > 0 ? (
-                <div className="mt-2">
-                  <span className="text-right font-semibold  line-through mr-2">
-                    {price}$
-                  </span>
-                  <span className="text-right font-bold text-red-600">
-                    {priceAfterDiscount}$
-                  </span>
-                </div>
-              ) : (
-                <span className="text-right font-semibold mt-3">{price}$</span>
-              )}
-            </div>
+            <span className="text-right font-semibold mt-3">{price}$</span>
           </div>
         </div>
         <div className="grid grid-cols-[20%_auto] gap-2 md:gap-6 lg:hidden">
@@ -452,18 +422,25 @@ const AdminCards = ({ channel }) => {
               ></input>
             </label>
           </div>
-          <Checkbox
-            id="checkbox-1"
-            label="Специальные предложения"
-            channel={specialOffer}
-            onChange={handleSpecialOffersChangeForm}
-          />
-          <Checkbox
-            id="checkbox-2"
-            label="Пакетные предложения"
-            channel={packageOffer}
-            onChange={handlePackageOffersChangeForm}
-          />
+          <label className="modal-label">
+            Специальное предложение:
+            <input
+              className="modal-input"
+              type="text"
+              value={specialOffer}
+              onChange={(e) => setSpecialOffer(e.target.value)}
+            />
+          </label>
+
+          <label className="modal-label">
+            Пакетные предложения:
+            <input
+              className="modal-input"
+              type="text"
+              value={packageOffer}
+              onChange={(e) => setPackageOffer(e.target.value)}
+            />
+          </label>
 
           <label className="modal-label">
             Описание:
@@ -491,4 +468,4 @@ const AdminCards = ({ channel }) => {
   );
 };
 
-export default AdminCards;
+export default NewFormCard;

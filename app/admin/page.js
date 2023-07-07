@@ -6,6 +6,7 @@ import PulseLoader from "react-spinners/PulseLoader";
 import AdminCards from "@components/AdminCards";
 import RemovedCard from "@components/RemovedCard";
 import { useFilterContext } from "@components/FilterContext";
+import NewFormCard from "@components/NewFormCard";
 
 const Home = () => {
   const {
@@ -22,16 +23,17 @@ const Home = () => {
     showLoader,
     showNoChannel,
     removedChannels,
+    newChannels
   } = useFilterContext();
 
   return (
-    <section className="main lg:grid grid-cols-[20%_auto] lg:py-5 lg:px-20 lg:gap-5">
+    <section className="main lg:grid grid-cols-[20%_auto] lg:py-5 lg:px-20 lg:gap-5 container sm:container-md md:container-lg mx-auto">
       <div className="hidden lg:block">
         <Filters />
       </div>
       <div className="content px-3">
         <div className="info lg:flex lg:mb-7 lg:justify-between" >
-          <h2 className="my-3 text-center lg:text-start font-semibold text-lg lg:my-0 lg:mr-10 lg:text-2xl">Каналы</h2>
+          <h2 className="my-3 text-center lg:text-start font-semibold text-lg lg:my-0 lg:mr-10 lg:text-2xl">Каналы / группы</h2>
           <div className="mb-4 text-center font-medium grid grid-cols-3 gap-4 text-sm lg:text-xl lg:block lg:text-start lg:mb-0">
             {/* <span className="filtrs-option">Рейтинг</span> */}
             <span className="filtrs-option lg:mr-10 cursor-pointer" onClick={handleSortBySubs}>
@@ -51,6 +53,11 @@ const Home = () => {
         <ul>
           <>
             <NewCard />
+            {newChannels && newChannels.length > 0 ? (
+              newChannels.map((channel) => (
+                <NewFormCard key={channel.id} channel={channel} />
+              ))
+            ) : null}
             {channels && channels.length > 0 ? (
               channels.map((channel) => (
                 <AdminCards key={channel.id} channel={channel} />

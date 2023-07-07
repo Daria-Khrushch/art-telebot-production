@@ -1,16 +1,42 @@
 "use client";
 import Image from "next/image";
 import { useFilterContext } from "./FilterContext";
+import Checkbox from "./Checkbox";
 
 export default function Filters() {
-
-  const { themes,lang, setSearchQuery, onSearch, searchQuery, onThemeFilter,onLangFilter, geos, types, onTypeFilter, onGeoFilter } = useFilterContext()
-
-
+  const {
+    themes,
+    lang,
+    setSearchQuery,
+    onSearch,
+    searchQuery,
+    onThemeFilter,
+    onLangFilter,
+    geos,
+    types,
+    onTypeFilter,
+    onGeoFilter,
+    handleSpecialOffersChange,
+    handlePackageOffersChange,
+  } = useFilterContext();
 
   return (
-    <div className="filters lg:text-2xl">
-      <h2 className="hidden lg:block lg:mb-7 font-semibold">Фильтры</h2>
+    <div className="filters lg:text-l">
+      <h2 className="hidden lg:text-2xl lg:block lg:mb-9 font-semibold">
+        Фильтры
+      </h2>
+      <Checkbox
+        id="checkbox-1"
+        label="Специальные предложения"
+        channel={""}
+        onChange={handleSpecialOffersChange}
+      />
+      <Checkbox
+        id="checkbox-2"
+        label="Пакетные предложения"
+        channel={""}
+        onChange={handlePackageOffersChange}
+      />
       <form id="search" onSubmit={onSearch} className="relative">
         <input
           value={searchQuery || ""}
@@ -18,7 +44,10 @@ export default function Filters() {
           placeholder="Поиск..."
           className="focus:outline-none placeholder:text-slate-800 overflow-hidden my-2 p-1 w-full border-solid border-2 border-slate-300 rounded-md"
         />
-        <button className="filtres-btn hidden absolute inset-y-0 right-0 lg:flex items-center pr-2" onSubmit={onSearch}>
+        <button
+          className="filtres-btn hidden absolute inset-y-0 right-0 lg:flex items-center pr-2"
+          onSubmit={onSearch}
+        >
           <Image
             className="filtres-img"
             src="/assets/images/search_icon.png"
@@ -27,7 +56,10 @@ export default function Filters() {
             height={25}
           />
         </button>
-         <button className="filtres-btn lg:hidden absolute inset-y-0 right-0 flex items-center pr-2" onSubmit={onSearch}>
+        <button
+          className="filtres-btn lg:hidden absolute inset-y-0 right-0 flex items-center pr-2"
+          onSubmit={onSearch}
+        >
           <Image
             className="filtres-img"
             src="/assets/images/search_icon.png"
@@ -39,7 +71,10 @@ export default function Filters() {
       </form>
       <div className="">
         <p className="hidden lg:block">Тематика:</p>
-        <select className="focus:outline-none my-2 relative p-1 w-full border-solid border-2 border-slate-300 rounded-md" onChange={(event) =>  onThemeFilter(event)}>
+        <select
+          className="focus:outline-none my-2 relative p-1 w-full border-solid border-2 border-slate-300 rounded-md"
+          onChange={(event) => onThemeFilter(event)}
+        >
           <option className="" value="">
             Все
           </option>
@@ -54,7 +89,10 @@ export default function Filters() {
       </div>
       <div className="">
         <p className=" hidden lg:block">Язык:</p>
-        <select className="focus:outline-none my-2 relative p-1 w-full border-solid border-2 border-slate-300 rounded-md" onChange={(event) => onLangFilter(event)}>
+        <select
+          className="focus:outline-none my-2 relative p-1 w-full border-solid border-2 border-slate-300 rounded-md"
+          onChange={(event) => onLangFilter(event)}
+        >
           <option className="filters-option" value="">
             Все
           </option>
@@ -70,7 +108,10 @@ export default function Filters() {
 
       <div className="">
         <p className=" hidden lg:block">Геолокация:</p>
-        <select className="focus:outline-none my-2 relative p-1 w-full border-solid border-2 border-slate-300 rounded-md" onChange={(event) => onGeoFilter(event)}>
+        <select
+          className="focus:outline-none my-2 relative p-1 w-full border-solid border-2 border-slate-300 rounded-md"
+          onChange={(event) => onGeoFilter(event)}
+        >
           <option className="filters-option" value="">
             Все
           </option>
@@ -86,7 +127,10 @@ export default function Filters() {
 
       <div className="">
         <p className=" hidden lg:block">Тип:</p>
-        <select className="focus:outline-none my-2 relative p-1 w-full border-solid border-2 border-slate-300 rounded-md" onChange={(event) => onTypeFilter(event)}>
+        <select
+          className="focus:outline-none my-2 relative p-1 w-full border-solid border-2 border-slate-300 rounded-md"
+          onChange={(event) => onTypeFilter(event)}
+        >
           <option className="filters-option" value="">
             Все
           </option>

@@ -21,17 +21,17 @@ const Home = () => {
     showNoChannel,
   } = useFilterContext();
   return (
-    <section className="main lg:grid grid-cols-[20%_auto] lg:py-5 lg:px-20 lg:gap-5">
+    <section className="main lg:grid grid-cols-[20%_auto] lg:py-5 lg:px-20 lg:gap-5 container sm:container-md md:container-lg mx-auto">
       <div className="hidden lg:block">
         <Filters />
       </div>
 
       <div className="px-3 content">
         <div className="info lg:flex lg:mb-7 lg:justify-between">
-          <h2 className="my-3 text-center font-semibold text-lg lg:text-start lg:my-0 lg:mr-10 lg:text-2xl">Каналы</h2>
+          <h2 className="my-3 text-center font-semibold text-lg lg:text-start lg:my-0 lg:mr-10 lg:text-2xl">Каналы / группы</h2>
           <div className="mb-4 text-center font-medium grid grid-cols-3 gap-4  text-sm  lg:text-xl lg:block lg:text-start lg:mb-0">
     
-            <span className="filtrs-option lg:mr-10 cursor-pointer" onClick={handleSortBySubs}>
+            <span className="filtrs-option lg:mr-10 cursor-pointer " onClick={handleSortBySubs}>
               Подписчики
               {isSubSorted ? (isSubSortedDesc ? "🔽" : "🔼") : ""}
             </span>

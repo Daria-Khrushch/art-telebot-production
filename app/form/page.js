@@ -1,13 +1,15 @@
 "use client";
-import React, { useState } from "react";
-import Modal from "./Modal";
-import { useFilterContext } from "./FilterContext";
-import Checkbox from "./Checkbox";
 
-const NewCard = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+import { useFilterContext } from "@components/FilterContext";
+import React, { useState } from "react";
+import PulseLoader from "react-spinners/PulseLoader";
+import { useRouter } from "next/navigation";
+
+function page() {
+  const router = useRouter();
   const [channelName, setChannelName] = useState("");
   const [ava, setAva] = useState("");
+  const [link, setLink] = useState("");
   const [theme, setTheme] = useState("");
   const [language, setLanguage] = useState("");
   const [description, setDescription] = useState("");
@@ -15,37 +17,13 @@ const NewCard = () => {
   const [views, setViews] = useState(0);
   const [cpv, setCpv] = useState(0);
   const [geo, setGeo] = useState("");
-  const [type, setType] = useState("группа");
+  const [type, setType] = useState("");
   const [errors, setErrors] = useState({});
-  const [shown, setShown] = useState(1);
-  const [link, setLink] = useState("");
-    const [specialOffer, setSpecialOffer] = useState("");
-  const [packageOffer, setPackageOffer] = useState("");
+  const [showLoader, setShowLoader] = useState(false);
+  const [showBtn, setShowBtn] = useState(true);
+  const [showCheck, setShowCheck] = useState(false);
 
-  const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
-
-  const {
-    themes,
-    lang,
-    geos,
-    types
-  } = useFilterContext();
-
-      const handleSpecialOffersChangeForm = (isChecked) => {
-    if (isChecked) {
-      setSpecialOffer("1");
-    } else {
-      setSpecialOffer("");
-    }
-  };
-
-  const handlePackageOffersChangeForm = (isChecked) => {
-    if (isChecked) {
-      setPackageOffer("1");
-    } else {
-      setPackageOffer("");
-    }
-  };
+  const { themes, lang, geos, types } = useFilterContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,8 +33,8 @@ const NewCard = () => {
     if (!channelName) {
       validationErrors.channelName = "Пожалуйста, введите название канала";
     }
-    if (!ava) {
-      validationErrors.ava = "Пожалуйста, введите URL картинки";
+    if (!link) {
+      validationErrors.link = "Пожалуйста, введите URL канала";
     }
     if (!theme) {
       validationErrors.theme = "Пожалуйста, введите тему канала";
@@ -77,9 +55,6 @@ const NewCard = () => {
     if (!geo) {
       validationErrors.geo = "Пожалуйста, выберите геолокацию канала";
     }
-    if (!link) {
-      validationErrors.link = "Пожалуйста, введите ссылку на канал";
-    }
     if (!type) {
       validationErrors.type = "Пожалуйста, выберите тип канала";
     }
@@ -95,7 +70,8 @@ const NewCard = () => {
       setErrors(validationErrors);
       return;
     } else {
-      console.log("Send data");
+      setShowLoader(true);
+      setShowBtn(false);
       const res = await fetch("/api/cards/new", {
         method: "POST",
         headers: {
@@ -103,113 +79,71 @@ const NewCard = () => {
         },
         body: JSON.stringify({
           avatar: ava,
+          link: link,
           name: channelName,
           theme: theme,
           language: language,
           description: description,
           subscribers: subscribers,
           views: views,
-          is_shown: shown,
           type: type,
           geolocation: geo,
-          link: link,
           cpv: cpv,
-          is_new: 0,
-          special_offer: specialOffer,
-          package_offer: packageOffer,
-          price_after_discount: priceAfterDiscount,
+          is_shown: 0,
         }),
       })
         .then((response) => response.json())
         .then((result) => {
           // Обработка успешного ответа
-          // console.log(result);
+          setShowCheck(true);
+          setShowLoader(false);
         })
         .catch((error) => {
           // Обработка ошибок
-          console.error(error);
+            console.error(error);
+            throw(error)
         });
     }
 
     setChannelName("");
-    setAva("");
     setTheme("");
     setDescription("");
     setLanguage("");
-    setLink("");
-    setCpv("");
+    setCpv(0);
     setSubscribers(0);
     setViews(0);
+    setAva("")
+    setLink("")
     setErrors({});
-    setSpecialOffer("");
-    setPackageOffer("");
-    setIsModalOpen(false);
-  };
-
-  const handleShow = (event) => {
-    event.preventDefault();
-    const valueToNum = parseInt(event.target.value);
-    setShown(valueToNum);
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+    };
+    
+    const handleRefresh = () => {
+        setShowBtn(true)
+        setShowCheck(false)
+    }
 
   return (
-    <>
-      <div
-        className="card admin-card cursor-pointer text-l text-center border-solid border border-slate-300 rounded-md p-2 mb-2 lg:text-xl hover:bg-slate-200"
-        onClick={openModal}
-      >
-        Добавить новый канал
-      </div>
-
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+    <div className="container sm:container-md md:container-lg mx-auto p-10">
+      <div className="new-form new-channel-form mx-auto">
         <form
           id="buyer-modal-form"
           onSubmit={handleSubmit}
-          className="modal-form text-xs"
+          className="lg:p-15 text-l p-5 "
         >
-          <div className="flex">
-            <label className="modal-label w-1/2">
-              Название:
-              <input
-                className="modal-input"
-                type="text"
-                value={channelName}
-                onChange={(e) => setChannelName(e.target.value)}
-              />
-              {errors.channelName && (
-                <span className="error">{errors.channelName}</span>
-              )}
-            </label>
+          <label className="modal-label">
+            Название:
+            <input
+              className="modal-input"
+              type="text"
+              value={channelName}
+              onChange={(e) => setChannelName(e.target.value)}
+            />
+            {errors.channelName && (
+              <span className="error">{errors.channelName}</span>
+            )}
+          </label>
 
-            <label className="modal-label w-1/2">
-              Тип:
-              <div className="flex">
-                <select
-                  className="modal-input w-1/2"
-                  onChange={(e) => setType(e.target.value)}
-                >
-                  {types && types.length > 0
-                    ? types.map((item) => (
-                        <option key={Math.random()} className="" value={item}>
-                          {item}
-                        </option>
-                      ))
-                    : null}
-                </select>
-              </div>
-              {errors.type && <span className="error">{errors.type}</span>}
-            </label>
-          </div>
-
-          <div className="flex">
+           <div className="flex">
             <label className="modal-label w-1/2">
               Аватар:
               <input
@@ -217,9 +151,8 @@ const NewCard = () => {
                 type="text"
                 value={ava}
                 onChange={(e) => setAva(e.target.value)}
-                placeholder="https://..."
+                placeholder="https://.."
               />
-              {errors.ava && <span className="error">{errors.ava}</span>}
             </label>
 
             <label className="modal-label w-1/2">
@@ -234,17 +167,40 @@ const NewCard = () => {
               {errors.link && <span className="error">{errors.link}</span>}
             </label>
           </div>
-
           <label className="modal-label">
-            Гео:
+            Тип канала:
+            <div className="flex">
+              {/* <input
+                className="modal-input"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+              /> */}
+              <select
+                className="modal-input "
+                onChange={(e) => setType(e.target.value)}
+              >
+                 <option value="">Выберите тип канала</option>
+                {types && types.length > 0
+                  ? types.map((item) => (
+                      <option key={Math.random()} value={item}>
+                        {item}
+                      </option>
+                    ))
+                  : null}
+              </select>
+            </div>
+            {errors.type && <span className="error">{errors.type}</span>}
+          </label>
+          <label className="modal-label">
+            Гео канала:
             <div className="flex">
               <input
-                className="modal-input w-1/2"
+                className="modal-input"
                 value={geo}
                 onChange={(e) => setGeo(e.target.value)}
               />
               <select
-                className="modal-input w-1/2"
+                className="modal-input "
                 onChange={(e) => setGeo(e.target.value)}
               >
                 <option value="Выберите геолокацию канала">Свой вариант</option>
@@ -264,13 +220,13 @@ const NewCard = () => {
             Тема:
             <div className="flex">
               <input
-                className="modal-input w-1/2"
+                className="modal-input"
                 type="text"
                 value={theme}
                 onChange={(e) => setTheme(e.target.value)}
               />
               <select
-                className="modal-input w-1/2"
+                className="modal-input "
                 onChange={(e) => setTheme(e.target.value)}
               >
                 <option value="Введите тему канала">Свой вариант</option>
@@ -287,15 +243,15 @@ const NewCard = () => {
           </label>
 
           <label className="modal-label">
-            Язык:
+            Язык канала:
             <div className="flex">
               <input
-                className="modal-input w-1/2"
+                className="modal-input"
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
               />
               <select
-                className="modal-input w-1/2"
+                className="modal-input "
                 onChange={(e) => setLanguage(e.target.value)}
               >
                 <option value="Введите язык канала">Свой вариант</option>
@@ -312,66 +268,37 @@ const NewCard = () => {
               <span className="error">{errors.language}</span>
             )}
           </label>
-          <div className="flex">
-            <label className="modal-label w-1/2">
-              Количество просмотров:
-              <input
-                className="modal-input"
-                type="number"
-                inputMode="numeric"
-                value={views}
-                onChange={(e) => setViews(parseInt(e.target.value))}
-              ></input>
-            </label>
-            <label className="modal-label w-1/2">
-              Колличество подписчиков:
-              <input
-                className="modal-input"
-                type="number"
-                inputMode="numeric"
-                value={subscribers}
-                onChange={(e) => setSubscribers(parseInt(e.target.value))}
-              ></input>
-            </label>
-          </div>
-          <div className="flex mb-1">
-            <label className="modal-label w-1/2">
-              CPV:
-              <input
-                className="modal-input"
-                type="number"
-                inputMode="numeric"
-                value={cpv}
-                onChange={(e) => setCpv(parseInt(e.target.value))}
-              ></input>
-            </label>
 
-            <label className="modal-label w-1/2">
-              Цена со скидкой:
-              <input
-                className="modal-input"
-                type="number"
-                inputMode="numeric"
-                value={priceAfterDiscount}
-                onChange={(e) =>
-                  setPriceAfterDiscount(parseInt(e.target.value))
-                }
-              ></input>
-            </label>
-          </div>
-
-          <Checkbox
-            id="checkbox-1"
-            label="Специальные предложения"
-            channel={""}
-            onChange={handleSpecialOffersChangeForm}
-          />
-          <Checkbox
-            id="checkbox-2"
-            label="Пакетные предложения"
-            channel={""}
-            onChange={handlePackageOffersChangeForm}
-          />
+          <label className="modal-label">
+            Количество просмотров:
+            <input
+              className="modal-input"
+              type="number"
+              inputMode="numeric"
+              value={views}
+              onChange={(e) => setViews(parseInt(e.target.value))}
+            ></input>
+          </label>
+          <label className="modal-label">
+            Колличество подписчиков:
+            <input
+              className="modal-input"
+              type="number"
+              inputMode="numeric"
+              value={subscribers}
+              onChange={(e) => setSubscribers(parseInt(e.target.value))}
+            ></input>
+          </label>
+          <label className="modal-label">
+            CPV:
+            <input
+              className="modal-input"
+              type="number"
+              inputMode="numeric"
+              value={cpv}
+              onChange={(e) => setCpv(parseInt(e.target.value))}
+            ></input>
+          </label>
 
           <label className="modal-label">
             Описание:
@@ -382,21 +309,22 @@ const NewCard = () => {
             ></textarea>
           </label>
 
-          <label className="modal-label">
-            <select
-              className="modal-input"
-              onChange={(event) => handleShow(event)}
-            >
-              <option value="1">Показать</option>
-              <option value="0">Скрыть</option>
-            </select>
-          </label>
-
-          <button type="submit">Отправить</button>
+          {showBtn ? <button type="submit">Отправить</button> : null}
+          {showLoader ? (
+            <div>
+              <PulseLoader color="#315EEB" margin={10} />
+            </div>
+          ) : null}
+          {showCheck ? (
+            <div>
+              <div className="mb-3">✅ Заявка успешно отпралена</div>
+              <button className="button-form" onClick={handleRefresh}>Новая заявка</button>
+            </div>
+          ) : null}
         </form>
-      </Modal>
-    </>
+      </div>
+    </div>
   );
-};
+}
 
-export default NewCard;
+export default page;
